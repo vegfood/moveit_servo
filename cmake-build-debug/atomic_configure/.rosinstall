@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/gr-arm-7xx2/gr3_arm_ros/catkin_ws/src/moveit_servo/cmake-build-debug/devel/setup.sh
