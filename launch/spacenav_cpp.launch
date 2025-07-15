@@ -1,31 +1,43 @@
 <launch>
-  <!-- The package has 2 examples of converting joystick commands to servo commands.
-       This is the lower-latency C++ example. You can modify it in your own package for
-       your own type of gamepad or joystick.
-       It reduces latency (slightly) compared to spacenav_teleop_tools.launch.
-       We don't plan to accept pull requests for other controller types using this method,
-       because it would be too much to maintain.
-       But, we do plan to accept teleop_tools config files (see spacenav_teleop_tools.launch)
-  -->
+    <!-- The package has 2 examples of converting joystick commands to servo commands.
+         This is the lower-latency C++ example. You can modify it in your own package for
+         your own type of gamepad or joystick.
+         It reduces latency (slightly) compared to spacenav_teleop_tools.launch.
+         We don't plan to accept pull requests for other controller types using this method,
+         because it would be too much to maintain.
+         But, we do plan to accept teleop_tools config files (see spacenav_teleop_tools.launch)
+    -->
+    <group ns="arm">
+<!--        <node name="spacenav_node" pkg="spacenav_node" type="spacenav_node"/>-->
 
-  <node name="spacenav_node" pkg="spacenav_node" type="spacenav_node" />
-
-  <node name="spacenav_to_twist" pkg="moveit_servo" type="spacenav_to_twist" output="screen"/>
+<!--        <node name="spacenav_to_twist" pkg="moveit_servo" type="spacenav_to_twist" output="screen"/>-->
 
 
-  <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen" >
-    <param name="parameter_ns" type="string" value="optional_parameter_namespace" />
-    <rosparam ns="optional_parameter_namespace" command="load" file="$(find moveit_servo)/config/ur_simulated_config.yaml" />
-  </node>
-  <arg name="dev" default="/dev/input/js0" />
-  <!-- Launch joy node -->
-  <node pkg="joy" type="joy_node" name="joy">
-    <param name="dev" value="$(arg dev)" /> <!-- Customize this to match the location your joystick is plugged in on-->
-    <param name="deadzone" value="0.2" />
-    <param name="autorepeat_rate" value="40" />
-    <param name="coalesce_interval" value="0.025" />
-  </node>
+<!--        <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">-->
+<!--            <param name="parameter_ns" type="string" value="optional_parameter_namespace"/>-->
+<!--            <rosparam ns="optional_parameter_namespace" command="load"-->
+<!--                      file="$(find moveit_servo)/config/ur_simulated_config.yaml"/>-->
+<!--        </node>-->
+<!--        <arg name="dev" default="/dev/input/js0"/>-->
+<!--        &lt;!&ndash; Launch joy node &ndash;&gt;-->
+<!--        <node pkg="joy" type="joy_node" name="joy">-->
+<!--            <param name="dev"-->
+<!--                   value="$(arg dev)"/> &lt;!&ndash; Customize this to match the location your joystick is plugged in on&ndash;&gt;-->
+<!--            <param name="deadzone" value="0.2"/>-->
+<!--            <param name="autorepeat_rate" value="40"/>-->
+<!--            <param name="coalesce_interval" value="0.025"/>-->
+<!--        </node>-->
 
+        <arg name="config" default="$(find moveit_servo)/config/ur_simulated_config.yaml"/>
+
+        <node name="spacenav_node" pkg="spacenav_node" type="spacenav_node"/>
+
+        <node name="spacenav_to_twist" pkg="moveit_servo" type="spacenav_to_twist" output="screen"/>
+
+        <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">
+            <rosparam command="load" file="$(arg config)"/>
+        </node>
+    </group>
 
 
 </launch>
